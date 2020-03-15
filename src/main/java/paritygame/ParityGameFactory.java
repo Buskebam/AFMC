@@ -41,7 +41,7 @@ public class ParityGameFactory {
 
         ParityNode node = null;
 
-        while(node != null && node.identifier != highestIdentifier)
+        while(node == null || node.identifier != highestIdentifier)
         {
             node = parseParityNode(reader);
             game.setnode(node);
@@ -65,8 +65,6 @@ public class ParityGameFactory {
         readSkipThrowError(reader, ' ');
 
         int[] successors = parseSuccessor(reader);
-
-        readSkipThrowError(reader, ' ');
 
         String name = parseString(reader);
 
@@ -130,9 +128,9 @@ public class ParityGameFactory {
     static private String parseString(BufferedReader reader) throws IOException {
 
         String completeString = "";
-        reader.mark(2);
+        reader.mark(3);
 
-        if (readSkip(reader, '"')) {
+        if (readSkip(reader, " \"")) {
 
             while (true) {
                 char character = (char) reader.read();
@@ -178,7 +176,7 @@ public class ParityGameFactory {
 
         if(!readSkip(reader,expectedValue))
         {
-            throw new IOException("Parsing: \"" + expectedValue + "\" was expected but  was found.");
+            throw new IOException("Parsing: \"" + expectedValue + "\" was expected but was not found.");
         }
     }
 

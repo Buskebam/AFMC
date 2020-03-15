@@ -18,4 +18,18 @@ public class ParityGame {
     {
         nodes[node.identifier] = node;
     }
+
+
+    @Override
+    public String toString() {
+
+        String completeString = "parity " + (nodes.length - 1) + ";\n";
+
+        for(int i = 0; i< nodes.length ; i++)
+        {
+            completeString += nodes[i].toString();
+        }
+
+        return completeString;
+    }
 }

@@ -16,4 +16,37 @@ public class ParityNode {
         this.successors = successors;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+
+        String completeString = identifier + " " + priority + " ";
+
+        if(owner)
+        {
+            completeString += 1 + " ";
+        }
+        else
+        {
+            completeString += 0 + " ";
+        }
+
+
+        for(int i = 0; i< successors.length ; i++)
+        {
+            completeString += String.valueOf(successors[i]);
+
+            if(i < successors.length - 1) {
+                completeString += ",";
+            }
+        }
+        if(!name.equals(""))
+        {
+            completeString += " \"" + name +"\"";
+        }
+
+        completeString += ";\n";
+
+        return completeString;
+    }
 }
