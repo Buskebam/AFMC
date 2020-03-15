@@ -15,13 +15,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class ParityParserTest {
     @org.junit.jupiter.api.Test
     public void testFile1(){checkFile("ccp_games/german_linear_2.infinite_run_no_access.gm");}
-
     @org.junit.jupiter.api.Test
     public void testFile2(){checkFile("ccp_games/german_linear_2.invariantly_eventually_fair_shared_access.gm");}
-
     @org.junit.jupiter.api.Test
     public void testFile3(){checkFile("ccp_games/german_linear_3.infinite_run_no_access.gm");}
-
     @org.junit.jupiter.api.Test
     public void testFile4(){checkFile("ccp_games/german_linear_3.invariantly_eventually_fair_shared_access.gm");}
 

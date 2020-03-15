@@ -84,7 +84,7 @@ public class ParityGameFactory {
         while((char) reader.read() == ',');
         reader.reset();
 
-
+        //convert list to array
         int[] result = new int[list.size()];
 
         for (int i= 0; i<list.size();i++) {
