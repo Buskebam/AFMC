@@ -4,19 +4,35 @@ public class ParityGame {
 
     ParityNode[] nodes = null;
 
-    ParityGame(int highestNodeIdentifier)
+    int highestPriority = 0;
+
+    public ParityGame(int highestNodeIdentifier)
     {
         nodes = new ParityNode[highestNodeIdentifier+1];
     }
 
-    ParityNode getnode(int identifier)
+    public ParityNode getNode(int identifier)
     {
         return nodes[identifier];
     }
 
-    void setnode(ParityNode node)
+    public void setNode(ParityNode node)
     {
-        nodes[node.identifier] = node;
+        nodes[node.getIdentifier()] = node;
+        highestPriority = Math.max(highestPriority,node.getPriority());
+    }
+
+    public int getHighestPriority() {
+        return highestPriority;
+    }
+
+    public void setHighestPriority(int highestPriority) {
+        this.highestPriority = highestPriority;
+    }
+
+    public int getHighestNodeIdentifier()
+    {
+        return nodes.length-1;
     }
 
 

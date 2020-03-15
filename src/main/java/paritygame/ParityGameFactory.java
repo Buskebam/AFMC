@@ -41,10 +41,10 @@ public class ParityGameFactory {
 
         ParityNode node = null;
 
-        while(node == null || node.identifier != highestIdentifier)
+        while(node == null || node.getIdentifier() != highestIdentifier)
         {
             node = parseParityNode(reader);
-            game.setnode(node);
+            game.setNode(node);
         }
         return game;
 

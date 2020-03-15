@@ -4,17 +4,67 @@ public class ParityNode {
 
     int identifier = 0;
     int priority = 0;
-    boolean owner = false;
+    boolean ownerOdd = false;
+    boolean priorityOdd = false;
     int[] successors = null;
     String name = null;
 
-    ParityNode(int identifier, int priority, boolean owner, int[] successors, String name)
+    public ParityNode(int identifier, int priority, boolean ownerOdd, int[] successors, String name)
     {
         this.identifier = identifier;
         this.priority = priority;
-        this.owner = owner;
+        this.ownerOdd = ownerOdd;
+        this.priorityOdd = priority%2 == 1;
         this.successors = successors;
         this.name = name;
+    }
+
+    public int getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(int identifier) {
+        this.identifier = identifier;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public boolean isOwnerOdd() {
+        return ownerOdd;
+    }
+
+    public void setOwnerOdd(boolean ownerOdd) {
+        this.ownerOdd = ownerOdd;
+    }
+
+    public int[] getSuccessors() {
+        return successors;
+    }
+
+    public void setSuccessors(int[] successors) {
+        this.successors = successors;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isPriorityOdd() {
+        return priorityOdd;
+    }
+
+    public void setPriorityOdd(boolean priorityOdd) {
+        this.priorityOdd = priorityOdd;
     }
 
     @Override
@@ -22,7 +72,7 @@ public class ParityNode {
 
         String completeString = identifier + " " + priority + " ";
 
-        if(owner)
+        if(ownerOdd)
         {
             completeString += 1 + " ";
         }
