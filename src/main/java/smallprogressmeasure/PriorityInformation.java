@@ -1,5 +1,7 @@
 package smallprogressmeasure;
 
+import java.util.Arrays;
+
 public class PriorityInformation {
 
     int[] info = null;
@@ -9,6 +11,10 @@ public class PriorityInformation {
     {
         info = new int[maximumPriority+1];
     }
+    PriorityInformation(int[] info)
+    {
+        this.info = info;
+    }
 
     PriorityInformation progressMeasure(PriorityInformation M, int priority, boolean isOdd )
     {
@@ -16,23 +22,122 @@ public class PriorityInformation {
 
         if(!isOdd)
         {
+            for(int i = 1; i <= priority ;i+= 2 ) {
+                leastM.setCountPriority(i, info[i]);
+            }
 
         }
         else
         {
-            currentIndex = 1;
 
-            while()
+            boolean valueIncreased = false;
+
+            for(int i = 1; i <= priority && !valueIncreased;i+= 2 )
             {
+                int mPrio = M.getCountPriority(i);
+                int infoPrio = info[i];
 
-
+                if(mPrio==infoPrio)
+                {
+                    leastM.setCountPriority(i,infoPrio);
+                }
+                else if(mPrio>infoPrio)
+                {
+                    leastM.setCountPriority(i,infoPrio+1);
+                    valueIncreased = true;
+                }
             }
+
+            if(!valueIncreased)
+            {
+                leastM.setMaxed(true);
+            }
+
         }
 
-        return leasM;
+        return leastM;
     }
 
-    void increaseCountPriority(int priority)
+    PriorityInformation getBiggest(PriorityInformation other)
+    {
+        if(this.maxed)
+        {
+            return this;
+        }
+        else if(other.isMaxed())
+        {
+            return other;
+        }
+        else
+        {
+            for(int i = 1; i<this.info.length; i += 2)
+            {
+                int thisPrio = this.info[i];
+                int otherPrio = other.getCountPriority(i);
+
+                if(thisPrio < otherPrio )
+                {
+                    return other;
+                }
+                else if(thisPrio > otherPrio)
+                {
+                    return this;
+                }
+            }
+            return this; // apparently the same size
+
+        }
+
+    }
+
+    PriorityInformation getSmallest(PriorityInformation other)
+    {
+        if(this.maxed)
+        {
+            return other;
+        }
+        else if(other.isMaxed())
+        {
+            return this;
+        }
+        else
+        {
+            for(int i = 1; i<this.info.length; i += 2)
+            {
+                int thisPrio = this.info[i];
+                int otherPrio = other.getCountPriority(i);
+
+                if(thisPrio < otherPrio )
+                {
+                    return this;
+                }
+                else if(thisPrio > otherPrio)
+                {
+                    return other;
+                }
+            }
+            return this; // apparently the same size
+        }
+
+    }
+
+    void setCountPriority(int priority, int value)
+    {
+        info[priority] = value;
+    }
+
+
+    int getCountPriority(int priority)
+    {
+        if(maxed)
+        {
+            System.out.println("WARNING: Priority is read while it is maxed, this value does not represent anything!");
+        }
+        return info[priority];
+    }
+
+
+    public void increaseCountPriority(int priority)
     {
         info[priority]++;
     }
@@ -43,5 +148,16 @@ public class PriorityInformation {
 
     public void setMaxed(boolean maxed) {
         this.maxed = maxed;
+    }
+
+    @Override
+    public String toString() {
+        if(maxed) {
+            return "maxed";
+        }
+        else
+        {
+            return Arrays.toString(info);
+        }
     }
 }
