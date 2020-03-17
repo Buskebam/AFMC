@@ -16,11 +16,11 @@ public class PriorityInformation {
         this.info = info;
     }
 
-    PriorityInformation progressMeasure(PriorityInformation M, int priority, boolean isOdd )
+    PriorityInformation progressMeasure(PriorityInformation M, int priority, boolean isPriorityOdd )
     {
         PriorityInformation leastM = new PriorityInformation(info.length-1);
 
-        if(!isOdd)
+        if(!isPriorityOdd)
         {
             for(int i = 1; i <= priority ;i+= 2 ) {
                 leastM.setCountPriority(i, info[i]);
@@ -132,6 +132,7 @@ public class PriorityInformation {
         if(maxed)
         {
             System.out.println("WARNING: Priority is read while it is maxed, this value does not represent anything!");
+            return Integer.MAX_VALUE;
         }
         return info[priority];
     }
@@ -148,6 +149,25 @@ public class PriorityInformation {
 
     public void setMaxed(boolean maxed) {
         this.maxed = maxed;
+    }
+
+
+    public boolean equals(PriorityInformation obj) {
+
+        if(this.isMaxed() == obj.isMaxed())
+        {
+            if (!this.isMaxed()) {
+                for (int i = 1; i < this.info.length; i += 2) {
+                    if (this.info[i] != obj.getCountPriority(i)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override

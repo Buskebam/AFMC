@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class ProgressMeasureTest {
     @org.junit.jupiter.api.Test
-    public void testProgess1(){
+    public void testProgress1(){
         int priority = 0;
         boolean odd = priority%2==1;
 
@@ -18,7 +18,7 @@ public class ProgressMeasureTest {
         assertEquals("[0, 0, 0, 0]",info.progressMeasure(M,priority,odd).toString());
     }
     @org.junit.jupiter.api.Test
-    public void testProgess2(){
+    public void testProgress2(){
         int priority = 1;
         boolean odd = priority%2==1;
 
@@ -28,7 +28,7 @@ public class ProgressMeasureTest {
         assertEquals("maxed",info.progressMeasure(M,priority,odd).toString());
     }
     @org.junit.jupiter.api.Test
-    public void testProgess3(){
+    public void testProgress3(){
         int priority = 3;
         boolean odd = priority%2==1;
 
@@ -38,7 +38,7 @@ public class ProgressMeasureTest {
         assertEquals("[0, 2, 0, 1]",info.progressMeasure(M,priority,odd).toString());
     }
     @org.junit.jupiter.api.Test
-    public void testProgess4(){
+    public void testProgress4(){
         int priority = 1;
         boolean odd = priority%2==1;
 
@@ -49,7 +49,7 @@ public class ProgressMeasureTest {
     }
 
     @org.junit.jupiter.api.Test
-    public void testProgess5(){
+    public void testProgress5(){
         int priority = 2;
         boolean odd = priority%2==1;
 

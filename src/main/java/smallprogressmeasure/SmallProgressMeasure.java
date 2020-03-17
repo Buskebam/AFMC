@@ -17,7 +17,7 @@ public class SmallProgressMeasure {
 
         M = new PriorityInformation(game.getHighestPriority());
 
-        for(int i = 0; i< game.getHighestNodeIdentifier() ; i++)
+        for(int i = 0; i< game.getHighestNodeIdentifier() + 1; i++)
         {
             ParityNode node = game.getNode(i);
 
@@ -26,55 +26,92 @@ public class SmallProgressMeasure {
             }
         }
 
-        parityProgress = new PriorityInformation[game.getHighestNodeIdentifier()];
+        parityProgress = new PriorityInformation[game.getHighestNodeIdentifier() + 1];
 
-        for(int i = 0; i< game.getHighestNodeIdentifier(); i++)
+        for(int i = 0; i< game.getHighestNodeIdentifier() + 1; i++)
         {
             parityProgress[i] = new PriorityInformation(game.getHighestPriority());
         }
     }
-    /*
-    PriorityInformation[] calculate(){
 
-    }*/
+    void calculate(){
+
+        boolean somethingLifted = true;
+
+        while(somethingLifted)
+        {
+            somethingLifted = false;
+
+            for(int i = 0; i< parityProgress.length; i++) {
+
+                PriorityInformation current = parityProgress[i];
+
+                if (!current.isMaxed())
+                {
+                    lift(i);
+
+                    while (!current.equals(parityProgress[i])){
+                        current = parityProgress[i];
+                        lift(i);
+                        somethingLifted = true;
+                    }
+                }
+            }
+        }
+    }
 
     void lift(int identifier){
         PriorityInformation currentInfo = parityProgress[identifier];
 
-        if(!currentInfo.isMaxed()) {
+        ParityNode node = game.getNode(identifier);
 
-            ParityNode node = game.getNode(identifier);
+        int[] successors = node.getSuccessors();
 
-            int[] successors = node.getSuccessors();
+        ParityNode firstSuccessor = game.getNode(successors[0]);
 
-            if(!node.isOwnerOdd()) {
+        PriorityInformation info = parityProgress[successors[0]]
+                    .progressMeasure(M, firstSuccessor.getPriority(), firstSuccessor.isPriorityOdd());
 
-                PriorityInformation currentSmallest = parityProgress[successors[0]]
-                        .progressMeasure(M,node.getPriority(),node.isPriorityOdd());
+        if(!node.isOwnerOdd()) {
 
-                for (int i = 1; i < successors.length; i++) {
-                    currentSmallest = currentSmallest.getSmallest(
-                            parityProgress[successors[i]]
-                            .progressMeasure(M,node.getPriority(),node.isPriorityOdd()));
+            for (int i = 1; i < successors.length; i++) {
 
-                }
-                parityProgress[identifier] = currentSmallest;
+                ParityNode successor = game.getNode(successors[i]);
+
+                PriorityInformation smallProgress = parityProgress[successors[i]]
+                            .progressMeasure(M,successor.getPriority(),successor.isPriorityOdd());
+
+                info = info.getSmallest(smallProgress);
             }
-            else
-            {
-                PriorityInformation currentBiggest = parityProgress[successors[0]]
-                        .progressMeasure(M,node.getPriority(),node.isPriorityOdd());
+        }
+        else {
 
-                for (int i = 1; i < successors.length; i++) {
-                    currentBiggest = currentBiggest.getBiggest(
-                            parityProgress[successors[i]]
-                            .progressMeasure(M,node.getPriority(),node.isPriorityOdd()));
+            for (int i = 1; i < successors.length; i++) {
 
-                }
-                parityProgress[identifier] = currentBiggest;
+                ParityNode successor = game.getNode(successors[i]);
+
+                PriorityInformation smallProgress = parityProgress[successors[i]]
+                        .progressMeasure(M,successor.getPriority(),successor.isPriorityOdd());
+
+                info = info.getBiggest(smallProgress);
 
             }
         }
+        parityProgress[identifier] = info;
 
+    }
+
+    void printResults(){
+        for(int i = 0; i< parityProgress.length; i++)
+        {
+            System.out.println("Identifier: " + i + " OddWins: " +parityProgress[i].isMaxed());
+        }
+    }
+
+    void print()
+    {
+        for(int i = 0; i< parityProgress.length; i++) {
+            System.out.println("Identifer: " + i + " Found: " + parityProgress[i] );
+        }
     }
 }
