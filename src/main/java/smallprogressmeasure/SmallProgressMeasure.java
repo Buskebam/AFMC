@@ -4,6 +4,7 @@ import paritygame.ParityGame;
 import paritygame.ParityNode;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class SmallProgressMeasure {
 
@@ -12,6 +13,8 @@ public class SmallProgressMeasure {
     PriorityInformation[] parityProgress = null;
 
     ParityGame game = null;
+
+    int liftCounter = 0;
 
     public SmallProgressMeasure(ParityGame game){
 
@@ -50,6 +53,78 @@ public class SmallProgressMeasure {
             for(int i = 0; i< parityProgress.length; i++) {
 
                 PriorityInformation current = parityProgress[i];
+                if (!current.isMaxed())
+                {
+                    lift(i);
+                    if (!current.equals(parityProgress[i])){
+                        somethingLifted = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public void calculateRandomNaive(int seed)
+    {
+        //make schedule
+        int[] schedule = new int[parityProgress.length];
+
+        //fil it with regular order
+        for(int i = 0; i< schedule.length; i++) {
+            schedule[i] = i;
+        }
+
+        //randomize schedule
+        Random rand = new Random(seed);
+
+        for (int i = 0; i < schedule.length; i++) {
+            int randomIndexToSwap = rand.nextInt(schedule.length);
+            int temp = schedule[randomIndexToSwap];
+            schedule[randomIndexToSwap] = schedule[i];
+            schedule[i] = temp;
+        }
+
+        //similar to naive but using schedule
+
+        boolean somethingLifted = true;
+
+        //We keep looping untill nothing is lifted anymore
+        while(somethingLifted)
+        {
+            somethingLifted = false;
+
+            //In the naive aproach we go through all indentifiers in order and lift
+            //them untill they do not change anymore.
+            for(int i = 0; i< parityProgress.length; i++) {
+
+                int index = schedule[i];
+
+                PriorityInformation current = parityProgress[index];
+                if (!current.isMaxed())
+                {
+                    lift(index);
+                    if (!current.equals(parityProgress[index])){
+                        somethingLifted = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public void calculateIterative(){
+
+        boolean somethingLifted = true;
+
+        //We keep looping untill nothing is lifted anymore
+        while(somethingLifted)
+        {
+            somethingLifted = false;
+
+            //In the naive aproach we go through all indentifiers in order and lift
+            //them untill they do not change anymore.
+            for(int i = 0; i< parityProgress.length; i++) {
+
+                PriorityInformation current = parityProgress[i];
 
                 if (!current.isMaxed())
                 {
@@ -65,7 +140,60 @@ public class SmallProgressMeasure {
         }
     }
 
+    public void calculateRandomIterative(int seed)
+    {
+        //make schedule
+        int[] schedule = new int[parityProgress.length];
+
+        //fil it with regular order
+        for(int i = 0; i< schedule.length; i++) {
+            schedule[i] = i;
+        }
+
+        //randomize schedule
+        Random rand = new Random(seed);
+
+        for (int i = 0; i < schedule.length; i++) {
+            int randomIndexToSwap = rand.nextInt(schedule.length);
+            int temp = schedule[randomIndexToSwap];
+            schedule[randomIndexToSwap] = schedule[i];
+            schedule[i] = temp;
+        }
+
+        //similar to naive but using schedule
+
+        boolean somethingLifted = true;
+
+        //We keep looping untill nothing is lifted anymore
+        while(somethingLifted)
+        {
+            somethingLifted = false;
+
+            //In the naive aproach we go through all indentifiers in order and lift
+            //them untill they do not change anymore.
+            for(int i = 0; i< parityProgress.length; i++) {
+
+                int index = schedule[i];
+
+                PriorityInformation current = parityProgress[index];
+                if (!current.isMaxed())
+                {
+                    lift(index);
+
+                    while (!current.equals(parityProgress[index])){
+                        current = parityProgress[index];
+                        lift(index);
+                        somethingLifted = true;
+                    }
+                }
+            }
+        }
+    }
+
+
     void lift(int identifier){
+
+        liftCounter++;
 
         ParityNode node = game.getNode(identifier);
 
@@ -104,9 +232,14 @@ public class SmallProgressMeasure {
 
 
     public void printResults(){
-        for(int i = 0; i< parityProgress.length; i++)
+        if(liftCounter==0) {
+            System.out.println("No results available");
+        }
+        else
         {
-            System.out.println("Identifier: " + i + " OddWins: " +parityProgress[i].isMaxed());
+            for (int i = 0; i < parityProgress.length; i++) {
+                System.out.println("Identifier: " + i + " OddWins: " + parityProgress[i].isMaxed());
+            }
         }
     }
 
@@ -126,5 +259,9 @@ public class SmallProgressMeasure {
         for(int i = 0; i< parityProgress.length; i++) {
             System.out.println("Identifer: " + i + " Found: " + parityProgress[i] );
         }
+    }
+
+    public int getLiftCounter() {
+        return liftCounter;
     }
 }
