@@ -175,6 +175,23 @@ public class PriorityInformation {
         this.maxed = maxed;
     }
 
+    public boolean equals(PriorityInformation obj) {
+
+        if(this.isMaxed() == obj.isMaxed())
+        {
+            if (!this.isMaxed()) {
+                for (int i = 1; i < this.info.length; i += 2) {
+                    if (this.info[i] != obj.getCountPriority(i)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     @Override
     public String toString() {
