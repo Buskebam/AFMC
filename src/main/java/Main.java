@@ -11,11 +11,14 @@ import smallprogressmeasure.SmallProgressMeasure;
 
 public class Main implements Callable<Integer> {
     @Parameters(index = "0", paramLabel = "GM_FILE", description = "Path to the parity game file (*.gm)")
-    File gameFile;
+    private File gameFile;
 
 
-    @Option(names = { "-l", "--lift-selection" },  description = "NAIVE, ...")
+    @Option(names = { "-l", "--lift-selection" },  description = "NAIVE, RANDOM_NAIVE, ITERATIVE, RANDOM_ITERATIVE, ...")
     private String algorithm = "NAIVE";
+
+    @Option(names = { "-s", "--seed" },  description = "Seed used for random generator")
+    private int seed = 0;
 
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "display a help message")
     private boolean helpRequested = false;
@@ -39,6 +42,17 @@ public class Main implements Callable<Integer> {
                 solver.calculateNaive();
                 break;
 
+            case "RANDOM_NAIVE":
+                solver.calculateRandomNaive(seed);
+                break;
+            case "ITERATIVE":
+                solver.calculateIterative();
+                break;
+
+            case "RANDOM_ITERATIVE":
+                solver.calculateRandomIterative(seed);
+                break;
+
             default:
                 System.out.println("Didnt recognize algorithm: " + algorithm);
         }
@@ -49,6 +63,7 @@ public class Main implements Callable<Integer> {
         solver.printResults();
         System.out.println("-------------------------------------------------------------");
         System.out.println("EvaluationTime: " + duration + "ns");
+        System.out.println("LiftCounter: " + solver.getLiftCounter());
 
         return 0;
     }
