@@ -19,38 +19,49 @@ public class PriorityInformation {
     PriorityInformation progressMeasure(PriorityInformation M, int priority, boolean isPriorityOdd )
     {
         PriorityInformation leastM = new PriorityInformation(info.length-1);
-
-        if(!isPriorityOdd)
-        {
-            for(int i = 1; i <= priority ;i+= 2 ) {
-                leastM.setCountPriority(i, info[i]);
-            }
-
+        if (maxed) {
+            leastM.setMaxed(true);
         }
         else
         {
 
-            boolean valueIncreased = false;
-
-            for(int i = 1; i <= priority && !valueIncreased;i+= 2 )
-            {
-                int mPrio = M.getCountPriority(i);
-                int infoPrio = info[i];
-
-                if(mPrio==infoPrio)
-                {
-                    leastM.setCountPriority(i,infoPrio);
-                }
-                else if(mPrio>infoPrio)
-                {
-                    leastM.setCountPriority(i,infoPrio+1);
-                    valueIncreased = true;
-                }
+            for (int i = 1; i <= priority; i += 2) {
+                leastM.setCountPriority(i, info[i]);
             }
 
-            if(!valueIncreased)
+            if(isPriorityOdd)
             {
-                leastM.setMaxed(true);
+
+                boolean valueIncreased = false;
+
+                if(!isPriorityOdd)
+                {
+                    priority--; //we want to start at highest odd number
+                }
+
+                for(int i = priority; i >= 1 && !valueIncreased;i-= 2 )
+                {
+
+                    int mPrio = M.getCountPriority(i);
+                    int infoPrio = info[i];
+
+                    if(mPrio==infoPrio)
+                    {
+                        leastM.setCountPriority(i,0);
+                    }
+                    if(mPrio>infoPrio)
+                    {
+                        leastM.setCountPriority(i,infoPrio+1);
+                        valueIncreased = true;
+                    }
+
+                }
+
+                if(!valueIncreased)
+                {
+                    leastM.setMaxed(true);
+                }
+
             }
 
         }
