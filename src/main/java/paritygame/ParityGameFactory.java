@@ -39,20 +39,23 @@ public class ParityGameFactory {
 
         readSkipThrowError(reader, ";\n");
 
-        ParityNode node = null;
-
-        while(node == null || node.getIdentifier() != highestIdentifier)
+        for(int i = 0; i<highestIdentifier+1; i++)
         {
-            node = parseParityNode(reader);
+            ParityNode node = parseParityNode(reader,highestIdentifier);
             game.setNode(node);
         }
         return game;
 
     }
 
-    static private ParityNode parseParityNode(BufferedReader reader) throws IOException {
+    static private ParityNode parseParityNode(BufferedReader reader, int highestIdentifier) throws IOException {
 
         int identifier = parseNatural(reader);
+
+        if(identifier>highestIdentifier)
+        {
+            throw new IOException("Came across identifier that is bigger then the indicated highestIdentifier in the top of the file");
+        }
 
         readSkipThrowError(reader, ' ');
 
@@ -64,7 +67,7 @@ public class ParityGameFactory {
 
         readSkipThrowError(reader, ' ');
 
-        int[] successors = parseSuccessor(reader);
+        int[] successors = parseSuccessor(reader,highestIdentifier);
 
         String name = parseString(reader);
 
@@ -73,12 +76,19 @@ public class ParityGameFactory {
         return new ParityNode(identifier,priority,owner,successors,name);
     }
 
-    static private int[] parseSuccessor(BufferedReader reader) throws IOException {
+    static private int[] parseSuccessor(BufferedReader reader, int highestIdentifier) throws IOException {
 
         List<Integer> list = new ArrayList<Integer>();
 
         do{
-            list.add(parseNatural(reader));
+            int foundSuccessor= parseNatural(reader);
+
+            if(foundSuccessor>highestIdentifier)
+            {
+                throw new IOException("Came across successor that is bigger then the indicated highestIdentifier in the top of the file");
+            }
+            list.add(foundSuccessor);
+
             reader.mark(2);
         }
         while((char) reader.read() == ',');
@@ -100,7 +110,7 @@ public class ParityGameFactory {
         while(true) {
             char character = (char) reader.read();
             // we continue untill we come accros one of the following signs
-            if (character == ',' || character == ' '|| character == ';') {
+            if (character == ',' || character == ' '|| character == ';'|| character == (char) -1) {
 
                 break;
             }
@@ -110,6 +120,12 @@ public class ParityGameFactory {
             reader.mark(2);
         }
         reader.reset();
+
+        if(completeString == "")
+        {
+            throw new IOException("About to parse an empty string as number, are you sure the maximum highestIdentifier in the top of the file is correct and every identifier is defined in between");
+        }
+
         return  Integer.parseInt(completeString);
     }
 
@@ -135,7 +151,7 @@ public class ParityGameFactory {
             while (true) {
                 char character = (char) reader.read();
 
-                if (character == '"') {
+                if (character == '"'|| character == (char) -1) {
 
                     break;
                 }

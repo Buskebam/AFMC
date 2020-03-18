@@ -1,6 +1,8 @@
 package paritygame;
 
 public class ParityGame {
+    //A game has a array of nodes and value indicating the highest priority that is found in system.
+    //It is saved so we do not look through the entire system when we need it.
 
     ParityNode[] nodes = null;
 
@@ -38,6 +40,9 @@ public class ParityGame {
 
     @Override
     public String toString() {
+        //We print in the same structure as the supplied files.
+        //Now we can test parser easy by comparing printed structure
+        //and original file.
 
         String completeString = "parity " + (nodes.length - 1) + ";\n";
 
