@@ -40,10 +40,13 @@ public class SmallProgressMeasure {
 
         boolean somethingLifted = true;
 
+        //We keep looping untill nothing is lifted anymore
         while(somethingLifted)
         {
             somethingLifted = false;
 
+            //In the naive aproach we go through all indentifiers in order and lift
+            //them untill they do not change anymore.
             for(int i = 0; i< parityProgress.length; i++) {
 
                 PriorityInformation current = parityProgress[i];
@@ -52,7 +55,7 @@ public class SmallProgressMeasure {
                 {
                     lift(i);
 
-                    while (!current.equals(parityProgress[i])&&!current.isMaxed()){
+                    while (!current.equals(parityProgress[i])){
                         current = parityProgress[i];
                         lift(i);
                         somethingLifted = true;
@@ -71,6 +74,7 @@ public class SmallProgressMeasure {
         PriorityInformation info = parityProgress[successors[0]]
                     .progressMeasure(M, node.getPriority(), node.isPriorityOdd());
 
+        //For a even node we are intereset in smallest value and for the odd the biggest
         if(!node.isOwnerOdd()) {
 
             for (int i = 1; i < successors.length; i++) {
@@ -94,6 +98,7 @@ public class SmallProgressMeasure {
 
             }
         }
+        //save result
         parityProgress[identifier] = info;
     }
 

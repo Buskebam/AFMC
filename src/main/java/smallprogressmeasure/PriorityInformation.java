@@ -19,11 +19,15 @@ public class PriorityInformation {
     PriorityInformation progressMeasure(PriorityInformation M, int priority, boolean isPriorityOdd )
     {
         PriorityInformation leastM = new PriorityInformation(info.length-1);
+
         if (maxed) {
+            //When maxed the least is also maxed.
             leastM.setMaxed(true);
         }
         else
         {
+            //We first copy the current info to the least. For the even case we stop here
+            //Because this is the smallest case that is equal or greater then the current info.
 
             for (int i = 1; i <= priority; i += 2) {
                 leastM.setCountPriority(i, info[i]);
@@ -31,6 +35,7 @@ public class PriorityInformation {
 
             if(isPriorityOdd)
             {
+                //The odd case still has to be increased before it is valid.
 
                 boolean valueIncreased = false;
 
@@ -39,16 +44,24 @@ public class PriorityInformation {
                     priority--; //we want to start at highest odd number
                 }
 
+                //We loop from highest odd priority to the smallest
                 for(int i = priority; i >= 1 && !valueIncreased;i-= 2 )
                 {
 
                     int mPrio = M.getCountPriority(i);
                     int infoPrio = info[i];
 
+                    //When values are equal, we need to increase another part because this value
+                    //is maxed out now. So we reset to zero and try to increase a number with a lower
+                    //priority
+
                     if(mPrio==infoPrio)
                     {
                         leastM.setCountPriority(i,0);
                     }
+
+                    //When there is still room to increase the value this is done and the boolean is set to
+                    //stop looking for a priority to increase.
                     if(mPrio>infoPrio)
                     {
                         leastM.setCountPriority(i,infoPrio+1);
@@ -56,7 +69,7 @@ public class PriorityInformation {
                     }
 
                 }
-
+                //If the value could not be increased at any place we still have to increase it but now to maxed.
                 if(!valueIncreased)
                 {
                     leastM.setMaxed(true);
@@ -162,24 +175,6 @@ public class PriorityInformation {
         this.maxed = maxed;
     }
 
-
-    public boolean equals(PriorityInformation obj) {
-
-        if(this.isMaxed() == obj.isMaxed())
-        {
-            if (!this.isMaxed()) {
-                for (int i = 1; i < this.info.length; i += 2) {
-                    if (this.info[i] != obj.getCountPriority(i)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
 
     @Override
     public String toString() {

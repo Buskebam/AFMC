@@ -78,6 +78,7 @@ public class ParityGameFactory {
 
     static private int[] parseSuccessor(BufferedReader reader, int highestIdentifier) throws IOException {
 
+        //first put found values in list, which later will extracted to suplly an array when the size is known.
         List<Integer> list = new ArrayList<Integer>();
 
         do{
@@ -109,7 +110,7 @@ public class ParityGameFactory {
 
         while(true) {
             char character = (char) reader.read();
-            // we continue untill we come accros one of the following signs
+            // we continue untill we come accros one of the following signs, we also end at end of file to make termination sure
             if (character == ',' || character == ' '|| character == ';'|| character == (char) -1) {
 
                 break;

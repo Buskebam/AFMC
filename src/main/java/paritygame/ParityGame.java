@@ -21,6 +21,8 @@ public class ParityGame {
     public void setNode(ParityNode node)
     {
         nodes[node.getIdentifier()] = node;
+
+        //Keep track of maximum, so it only has to done once
         highestPriority = Math.max(highestPriority,node.getPriority());
     }
 

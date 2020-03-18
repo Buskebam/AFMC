@@ -9,9 +9,9 @@ public class BiggestSmallest {
         PriorityInformation x = new PriorityInformation(new int[]{0,2,0,0});
         PriorityInformation y = new PriorityInformation(new int[]{0,2,0,1});
 
-        PriorityInformation biggest = x.getBiggest(y);
+        String biggest = x.getBiggest(y).toString();
 
-        assertEquals(y,biggest);
+        assertEquals("[0, 2, 0, 1]",biggest);
     }
 
     @org.junit.jupiter.api.Test
@@ -21,9 +21,9 @@ public class BiggestSmallest {
 
         x.setMaxed(true);
 
-        PriorityInformation biggest = x.getBiggest(y);
+        String biggest = x.getBiggest(y).toString();
 
-        assertEquals(x,biggest);
+        assertEquals("maxed",biggest);
     }
 
     @org.junit.jupiter.api.Test
@@ -31,9 +31,9 @@ public class BiggestSmallest {
         PriorityInformation x = new PriorityInformation(new int[]{0,2,4,0}); //ignore even entries
         PriorityInformation y = new PriorityInformation(new int[]{0,2,0,1});
 
-        PriorityInformation biggest = x.getBiggest(y);
+        String biggest = x.getBiggest(y).toString();
 
-        assertEquals(y,biggest);
+        assertEquals("[0, 2, 0, 1]",biggest);
     }
 
     @org.junit.jupiter.api.Test
@@ -41,9 +41,9 @@ public class BiggestSmallest {
         PriorityInformation x = new PriorityInformation(new int[]{0,2,0,3});
         PriorityInformation y = new PriorityInformation(new int[]{0,2,0,1});
 
-        PriorityInformation biggest = x.getBiggest(y);
+        String biggest = x.getBiggest(y).toString();
 
-        assertEquals(x,biggest);
+        assertEquals("[0, 2, 0, 3]",biggest);
     }
 
     @org.junit.jupiter.api.Test
@@ -51,9 +51,9 @@ public class BiggestSmallest {
         PriorityInformation x = new PriorityInformation(new int[]{0,2,0,0});
         PriorityInformation y = new PriorityInformation(new int[]{0,2,0,1});
 
-        PriorityInformation biggest = x.getSmallest(y);
+        String smallest = x.getSmallest(y).toString();
 
-        assertEquals(x,biggest);
+        assertEquals("[0, 2, 0, 0]",smallest);
     }
 
     @org.junit.jupiter.api.Test
@@ -63,9 +63,9 @@ public class BiggestSmallest {
 
         x.setMaxed(true);
 
-        PriorityInformation biggest = x.getSmallest(y);
+        String smallest = x.getSmallest(y).toString();
 
-        assertEquals(y,biggest);
+        assertEquals("[0, 2, 0, 1]",smallest);
     }
 
     @org.junit.jupiter.api.Test
@@ -73,9 +73,9 @@ public class BiggestSmallest {
         PriorityInformation x = new PriorityInformation(new int[]{0,2,4,0}); //ignore even entries
         PriorityInformation y = new PriorityInformation(new int[]{0,2,0,1});
 
-        PriorityInformation biggest = x.getSmallest(y);
+        String smallest = x.getSmallest(y).toString();
 
-        assertEquals(x,biggest);
+        assertEquals("[0, 2, 4, 0]",smallest);
     }
 
     @org.junit.jupiter.api.Test
@@ -83,8 +83,8 @@ public class BiggestSmallest {
         PriorityInformation x = new PriorityInformation(new int[]{0,2,0,3});
         PriorityInformation y = new PriorityInformation(new int[]{0,2,0,1});
 
-        PriorityInformation biggest = x.getSmallest(y);
+        String smallest = x.getSmallest(y).toString();
 
-        assertEquals(y,biggest);
+        assertEquals("[0, 2, 0, 1]",smallest);
     }
 }

@@ -69,16 +69,19 @@ public class ParityNode {
 
     @Override
     public String toString() {
+        //We print in the same structure as the supplied files.
+        //Now we can test parser easy by comparing printed structure
+        //and original file.
 
         String completeString = identifier + " " + priority + " ";
 
         if(ownerOdd)
         {
-            completeString += 1 + " ";
+            completeString += "1 ";
         }
         else
         {
-            completeString += 0 + " ";
+            completeString += "0 ";
         }
 
 
@@ -86,6 +89,7 @@ public class ParityNode {
         {
             completeString += String.valueOf(successors[i]);
 
+            //add , after every successor except the last.
             if(i < successors.length - 1) {
                 completeString += ",";
             }
