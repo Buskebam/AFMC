@@ -59,4 +59,37 @@ public class ProgressMeasureTest {
         assertEquals("[0, 1, 0, 0]",info.progressMeasure(M,priority,odd).toString());
     }
 
+    @org.junit.jupiter.api.Test
+    public void testProgress6(){
+        int priority = 3;
+        boolean odd = priority%2==1;
+
+        PriorityInformation info = new PriorityInformation(new int[]{0,1,0,0});
+        PriorityInformation M = new PriorityInformation(new int[]{0, 3, 0, 1});
+
+        assertEquals("[0, 1, 0, 1]",info.progressMeasure(M,priority,odd).toString());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testProgress7(){
+        int priority = 3;
+        boolean odd = priority%2==1;
+
+        PriorityInformation info = new PriorityInformation(new int[]{0,1,0,1});
+        PriorityInformation M = new PriorityInformation(new int[]{0, 3, 0, 1});
+
+        assertEquals("[0, 2, 0, 0]",info.progressMeasure(M,priority,odd).toString());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testProgress8(){
+        int priority = 1;
+        boolean odd = priority%2==1;
+
+        PriorityInformation info = new PriorityInformation(new int[]{0,1,0,0});
+        PriorityInformation M = new PriorityInformation(new int[]{0, 3, 0, 0});
+
+        assertEquals("[0, 2, 0, 0]",info.progressMeasure(M,priority,odd).toString());
+    }
+
 }

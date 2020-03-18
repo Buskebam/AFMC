@@ -3,6 +3,8 @@ package smallprogressmeasure;
 import paritygame.ParityGame;
 import paritygame.ParityNode;
 
+import java.util.Arrays;
+
 public class SmallProgressMeasure {
 
     PriorityInformation M = null;
@@ -34,7 +36,7 @@ public class SmallProgressMeasure {
         }
     }
 
-    void calculate(){
+    void calculateNaive(){
 
         boolean somethingLifted = true;
 
@@ -50,7 +52,7 @@ public class SmallProgressMeasure {
                 {
                     lift(i);
 
-                    while (!current.equals(parityProgress[i])){
+                    while (!current.equals(parityProgress[i])&&!current.isMaxed()){
                         current = parityProgress[i];
                         lift(i);
                         somethingLifted = true;
@@ -61,25 +63,22 @@ public class SmallProgressMeasure {
     }
 
     void lift(int identifier){
-        PriorityInformation currentInfo = parityProgress[identifier];
 
         ParityNode node = game.getNode(identifier);
 
         int[] successors = node.getSuccessors();
 
-        ParityNode firstSuccessor = game.getNode(successors[0]);
-
         PriorityInformation info = parityProgress[successors[0]]
-                    .progressMeasure(M, firstSuccessor.getPriority(), firstSuccessor.isPriorityOdd());
+                    .progressMeasure(M, node.getPriority(), node.isPriorityOdd());
 
         if(!node.isOwnerOdd()) {
 
             for (int i = 1; i < successors.length; i++) {
 
-                ParityNode successor = game.getNode(successors[i]);
-
                 PriorityInformation smallProgress = parityProgress[successors[i]]
-                            .progressMeasure(M,successor.getPriority(),successor.isPriorityOdd());
+                            .progressMeasure(M,node.getPriority(),node.isPriorityOdd());
+
+
 
                 info = info.getSmallest(smallProgress);
             }
@@ -88,24 +87,33 @@ public class SmallProgressMeasure {
 
             for (int i = 1; i < successors.length; i++) {
 
-                ParityNode successor = game.getNode(successors[i]);
-
                 PriorityInformation smallProgress = parityProgress[successors[i]]
-                        .progressMeasure(M,successor.getPriority(),successor.isPriorityOdd());
+                        .progressMeasure(M,node.getPriority(),node.isPriorityOdd());
 
                 info = info.getBiggest(smallProgress);
 
             }
         }
         parityProgress[identifier] = info;
-
     }
+
 
     void printResults(){
         for(int i = 0; i< parityProgress.length; i++)
         {
             System.out.println("Identifier: " + i + " OddWins: " +parityProgress[i].isMaxed());
         }
+    }
+
+    String getOddWins(){
+
+        boolean[] oddWins = new boolean[parityProgress.length];
+
+        for(int i = 0; i< parityProgress.length; i++)
+        {
+            oddWins[i] = parityProgress[i].isMaxed();
+        }
+        return  Arrays.toString(oddWins);
     }
 
     void print()
