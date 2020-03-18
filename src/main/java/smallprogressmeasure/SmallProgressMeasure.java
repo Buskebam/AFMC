@@ -13,7 +13,7 @@ public class SmallProgressMeasure {
 
     ParityGame game = null;
 
-    SmallProgressMeasure(ParityGame game){
+    public SmallProgressMeasure(ParityGame game){
 
         this.game = game;
 
@@ -36,7 +36,7 @@ public class SmallProgressMeasure {
         }
     }
 
-    void calculateNaive(){
+    public void calculateNaive(){
 
         boolean somethingLifted = true;
 
@@ -103,7 +103,7 @@ public class SmallProgressMeasure {
     }
 
 
-    void printResults(){
+    public void printResults(){
         for(int i = 0; i< parityProgress.length; i++)
         {
             System.out.println("Identifier: " + i + " OddWins: " +parityProgress[i].isMaxed());
@@ -121,7 +121,7 @@ public class SmallProgressMeasure {
         return  Arrays.toString(oddWins);
     }
 
-    void print()
+    public void print()
     {
         for(int i = 0; i< parityProgress.length; i++) {
             System.out.println("Identifer: " + i + " Found: " + parityProgress[i] );
