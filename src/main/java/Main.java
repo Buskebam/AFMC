@@ -17,7 +17,9 @@ public class Main implements Callable<Integer> {
     @Parameters(index = "0", paramLabel = "GM_FILE", description = "Path to the parity game file (*.gm)")
     private File gameFile;
 
-    @Option(names = { "-l", "--lift-selection" },  description = "NAIVE, RANDOM_NAIVE, PREDECESSOR_NAIVE, ITERATIVE, RANDOM_ITERATIVE, SELF_ITERATIVE, PREDECESSOR_ITERATIVE, RANDOM_SELF_ITERATIVE, PREDECESSOR_SELF_ITERATIVE...")
+    @Option(names = { "-l", "--lift-selection" },  description = "NAIVE_NO_ITERATION, RANDOM_NO_ITERATION, PREDECESSOR_NO_ITERATION, " +
+                                                                 "NAIVE_MAX_ITERATION, RANDOM_MAX_ITERATION, PREDECESSOR_MAX_ITERATION, " +
+                                                                 "NAIVE_SELF_ITERATION, RANDOM_SELF_ITERATION, PREDECESSOR_SELF_ITERATION...")
     private String algorithm = "NAIVE";
 
     @Option(names = { "-s", "--seed" },  description = "Seed used for random generator")
@@ -42,9 +44,9 @@ public class Main implements Callable<Integer> {
 
         switch (algorithm)
         {
-            case "PREDECESSOR_NAIVE":
-            case "PREDECESSOR_ITERATIVE":
-            case "PREDECESSOR_SELF_ITERATIVE":
+            case "PREDECESSOR_NO_ITERATION":
+            case "PREDECESSOR_MAX_ITERATION":
+            case "PREDECESSOR_SELF_ITERATION":
                 game.calculatePredecessors();
                 break;
         }
@@ -55,39 +57,39 @@ public class Main implements Callable<Integer> {
 
         switch(algorithm)
         {
-            case "NAIVE":
+            case "NAIVE_NO_ITERATION":
                 solver.calculate(NAIVE_SCHEDULE,NO_ITERATION,seed);
                 break;
 
-            case "RANDOM_NAIVE":
+            case "RANDOM_NO_ITERATION":
                 solver.calculate(RANDOM_SCHEDULE,NO_ITERATION,seed);
                 break;
 
-            case "PREDECESSOR_NAIVE":
+            case "PREDECESSOR_NO_ITERATION":
                 solver.calculate(PREDECESSOR_SCHEDULE,NO_ITERATION,seed);
                 break;
 
-            case "ITERATIVE":
+            case "NAIVE_MAX_ITERATION":
                 solver.calculate(NAIVE_SCHEDULE,MAX_ITERATION,seed);
                 break;
 
-            case "RANDOM_ITERATIVE":
+            case "RANDOM_MAX_ITERATION":
                 solver.calculate(RANDOM_SCHEDULE,MAX_ITERATION,seed);
                 break;
 
-            case "PREDECESSOR_ITERATIVE":
+            case "PREDECESSOR_MAX_ITERATION":
                 solver.calculate(PREDECESSOR_SCHEDULE,MAX_ITERATION,seed);
                 break;
 
-            case "SELF_ITERATIVE":
+            case "NAIVE_SELF_ITERATION":
                 solver.calculate(NAIVE_SCHEDULE,SELF_ITERATION,seed);
                 break;
 
-            case "RANDOM_SELF_ITERATIVE":
+            case "RANDOM_SELF_ITERATION":
                 solver.calculate(RANDOM_SCHEDULE,SELF_ITERATION,seed);
                 break;
 
-            case "PREDECESSOR_SELF_ITERATIVE":
+            case "PREDECESSOR_SELF_ITERATION":
                 solver.calculate(PREDECESSOR_SCHEDULE,SELF_ITERATION,0);
                 break;
 

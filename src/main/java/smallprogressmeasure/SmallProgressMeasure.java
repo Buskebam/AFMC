@@ -124,6 +124,8 @@ public class SmallProgressMeasure {
                     schedule[randomIndexToSwap] = schedule[i];
                     schedule[i] = temp;
                 }
+
+                System.out.println(Arrays.toString(schedule));
                 break;
         }
 
