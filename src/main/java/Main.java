@@ -13,12 +13,14 @@ public class Main implements Callable<Integer> {
     @Parameters(index = "0", paramLabel = "GM_FILE", description = "Path to the parity game file (*.gm)")
     private File gameFile;
 
-
     @Option(names = { "-l", "--lift-selection" },  description = "NAIVE, RANDOM_NAIVE, ITERATIVE, RANDOM_ITERATIVE, ...")
     private String algorithm = "NAIVE";
 
     @Option(names = { "-s", "--seed" },  description = "Seed used for random generator")
     private int seed = 0;
+
+    @Option(names = { "-a", "--print-all" },  description = "Print for every identifier who won")
+    private boolean printAll = false;
 
     @Option(names = { "-h", "--help" }, usageHelp = true, description = "display a help message")
     private boolean helpRequested = false;
@@ -60,7 +62,13 @@ public class Main implements Callable<Integer> {
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
 
-        solver.printResults();
+        if(printAll) {
+            solver.printResults();
+        }
+        else
+        {
+            solver.printResultZeroIdentifier();
+        }
         System.out.println("-------------------------------------------------------------");
         System.out.println("EvaluationTime: " + duration + "ns");
         System.out.println("LiftCounter: " + solver.getLiftCounter());
