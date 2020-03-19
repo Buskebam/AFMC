@@ -153,11 +153,14 @@ public class PriorityInformation {
 
     int getCountPriority(int priority)
     {
+        //commented out for speed, during testing this message came never up
+        /*
         if(maxed)
         {
             System.out.println("WARNING: Priority is read while it is maxed, this value does not represent anything!");
             return Integer.MAX_VALUE;
         }
+         */
         return info[priority];
     }
 
