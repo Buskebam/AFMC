@@ -11,6 +11,14 @@ import static helperfunctions.ArrayHelper.contains;
 
 public class SmallProgressMeasure {
 
+    public final static int NAIVE_SCHEDULE = 0;
+    public final static int PREDECESSOR_SCHEDULE = 1;
+    public final static int RANDOM_SCHEDULE = 2;
+
+    public final static int NO_ITERATION = 0;
+    public final static int SELF_ITERATION = 1;
+    public final static int MAX_ITERATION = 2;
+
     PriorityInformation M = null;
 
     PriorityInformation[] parityProgress = null;
@@ -42,259 +50,186 @@ public class SmallProgressMeasure {
         }
     }
 
-    public void calculateNaive(){
 
-        boolean somethingLifted = true;
-
-        //We keep looping untill nothing is lifted anymore
-        while(somethingLifted)
-        {
-            somethingLifted = false;
-
-            //In the naive aproach we go through all indentifiers in order and lift
-            //them untill they do not change anymore.
-            for(int i = 0; i< parityProgress.length; i++) {
-
-                PriorityInformation current = parityProgress[i];
-                if (!current.isMaxed())
-                {
-                    lift(i);
-                    if (!current.equals(parityProgress[i])){
-                        somethingLifted = true;
-                    }
-                }
-            }
-        }
-    }
-
-    public void calculateRandomNaive(int seed)
+    public void calculate(int scheduleMode, int progressionMode, int seed)
     {
         //make schedule
         int[] schedule = new int[parityProgress.length];
 
-        //fil it with regular order
-        for(int i = 0; i< schedule.length; i++) {
-            schedule[i] = i;
-        }
+        switch (scheduleMode){
 
-        //randomize schedule
-        Random rand = new Random(seed);
-
-        for (int i = 0; i < schedule.length; i++) {
-            int randomIndexToSwap = rand.nextInt(schedule.length);
-            int temp = schedule[randomIndexToSwap];
-            schedule[randomIndexToSwap] = schedule[i];
-            schedule[i] = temp;
-        }
-
-        //similar to naive but using schedule
-
-        boolean somethingLifted = true;
-
-        //We keep looping untill nothing is lifted anymore
-        while(somethingLifted)
-        {
-            somethingLifted = false;
-
-            //In the naive aproach we go through all indentifiers in order and lift
-            //them untill they do not change anymore.
-            for(int i = 0; i< parityProgress.length; i++) {
-
-                int index = schedule[i];
-
-                PriorityInformation current = parityProgress[index];
-                if (!current.isMaxed())
-                {
-                    lift(index);
-                    if (!current.equals(parityProgress[index])){
-                        somethingLifted = true;
-                    }
+            case NAIVE_SCHEDULE:
+                //fil it with regular order
+                for(int i = 0; i< schedule.length; i++) {
+                    schedule[i] = i;
                 }
-            }
-        }
-    }
 
-    public void calculateIterative(){
+                break;
 
-        boolean somethingLifted = true;
+            case PREDECESSOR_SCHEDULE:
 
-        //We keep looping untill nothing is lifted anymore
-        while(somethingLifted)
-        {
-            somethingLifted = false;
+                boolean[] scheduled = new boolean[parityProgress.length];
 
-            //In the naive aproach we go through all indentifiers in order and lift
-            //them untill they do not change anymore.
-            for(int i = 0; i< parityProgress.length; i++) {
+                int currentNode = -1;
 
-                PriorityInformation current = parityProgress[i];
+                for(int i = 0; i< schedule.length;i++) {
 
-                if (!current.isMaxed())
-                {
-                    lift(i);
-
-                    while (!current.equals(parityProgress[i])){
-                        current = parityProgress[i];
-                        lift(i);
-                        somethingLifted = true;
-                    }
-                }
-            }
-        }
-    }
-
-    public void calculateRandomIterative(int seed)
-    {
-        //make schedule
-        int[] schedule = new int[parityProgress.length];
-
-        //fil it with regular order
-        for(int i = 0; i< schedule.length; i++) {
-            schedule[i] = i;
-        }
-
-        //randomize schedule
-        Random rand = new Random(seed);
-
-        for (int i = 0; i < schedule.length; i++) {
-            int randomIndexToSwap = rand.nextInt(schedule.length);
-            int temp = schedule[randomIndexToSwap];
-            schedule[randomIndexToSwap] = schedule[i];
-            schedule[i] = temp;
-        }
-
-        //similar to naive but using schedule
-
-        boolean somethingLifted = true;
-
-        //We keep looping untill nothing is lifted anymore
-        while(somethingLifted)
-        {
-            somethingLifted = false;
-
-            //In the naive aproach we go through all indentifiers in order and lift
-            //them untill they do not change anymore.
-            for(int i = 0; i< parityProgress.length; i++) {
-
-                int index = schedule[i];
-
-                PriorityInformation current = parityProgress[index];
-                if (!current.isMaxed())
-                {
-                    lift(index);
-
-                    while (!current.equals(parityProgress[index])){
-                        current = parityProgress[index];
-                        lift(index);
-                        somethingLifted = true;
-                    }
-                }
-            }
-        }
-    }
-
-
-    public void calculateSelfIterative(){
-
-        boolean somethingLifted = true;
-
-        //We keep looping untill nothing is lifted anymore
-        while(somethingLifted)
-        {
-            somethingLifted = false;
-
-            //In the naive aproach we go through all indentifiers in order and lift
-            //them untill they do not change anymore.
-            for(int i = 0; i< parityProgress.length; i++) {
-
-                PriorityInformation current = parityProgress[i];
-
-                int[] successors = game.getNode(i).getSuccessors();
-                if (!current.isMaxed()) {
-                    if (contains(successors, i)) {
-
-                        lift(i);
-
-                        while (!current.equals(parityProgress[i])) {
-                            current = parityProgress[i];
-                            lift(i);
-                            somethingLifted = true;
+                    if(currentNode == -1) //all predesessors scheduled so new node has to be found or start state
+                    {
+                        //look for first not scheduled node
+                        for(int j = 0; j<scheduled.length;j++)
+                        {
+                            if(!scheduled[j])
+                            {
+                                currentNode = j;
+                                break;
+                            }
                         }
-
-                    } else {
-
-                        lift(i);
-                        if (!current.equals(parityProgress[i])) {
-                            somethingLifted = true;
-                        }
-
                     }
+
+                    schedule[i] = currentNode;
+                    scheduled[currentNode] = true;
+
+                    int[] currentPredecessors =  game.getNode(currentNode).getPredecessors();
+
+                    currentNode = -1; //untill better found no new current
+
+                    for (int j = 0; j < currentPredecessors.length; j++) {
+
+                        int potentialPredecessor = currentPredecessors[j];
+
+                        if(!scheduled[potentialPredecessor])
+                        {
+                            currentNode = potentialPredecessor;
+                            break;
+                        }
+                    }
+
                 }
-            }
-        }
-    }
+                break;
 
-    public void calculateRandomSelfIterative(int seed){
 
-        //make schedule
-        int[] schedule = new int[parityProgress.length];
+            case RANDOM_SCHEDULE:
+                //fil it with regular order
+                for(int i = 0; i< schedule.length; i++) {
+                    schedule[i] = i;
+                }
 
-        //fil it with regular order
-        for(int i = 0; i< schedule.length; i++) {
-            schedule[i] = i;
-        }
+                //randomize schedule
+                Random rand = new Random(seed);
 
-        //randomize schedule
-        Random rand = new Random(seed);
-
-        for (int i = 0; i < schedule.length; i++) {
-            int randomIndexToSwap = rand.nextInt(schedule.length);
-            int temp = schedule[randomIndexToSwap];
-            schedule[randomIndexToSwap] = schedule[i];
-            schedule[i] = temp;
+                for (int i = 0; i < schedule.length; i++) {
+                    int randomIndexToSwap = rand.nextInt(schedule.length);
+                    int temp = schedule[randomIndexToSwap];
+                    schedule[randomIndexToSwap] = schedule[i];
+                    schedule[i] = temp;
+                }
+                break;
         }
 
 
+        //System.out.println(Arrays.toString(schedule));
 
         boolean somethingLifted = true;
 
-        //We keep looping untill nothing is lifted anymore
-        while(somethingLifted)
-        {
-            somethingLifted = false;
+        switch (scheduleMode){
 
-            //In the naive aproach we go through all indentifiers in order and lift
-            //them untill they do not change anymore.
-            for(int i = 0; i< parityProgress.length; i++) {
+            case NO_ITERATION:
 
-                int index = schedule[i];
+                //We keep looping untill nothing is lifted anymore
+                while(somethingLifted)
+                {
+                    somethingLifted = false;
 
-                PriorityInformation current = parityProgress[index];
+                    //In the naive aproach we go through all indentifiers in order and lift
+                    //them untill they do not change anymore.
+                    for(int i = 0; i< parityProgress.length; i++) {
 
-                int[] successors = game.getNode(index).getSuccessors();
-                if (!current.isMaxed()) {
-                    if (contains(successors, index)) {
+                        int index = schedule[i];
 
-                        lift(i);
-
-                        while (!current.equals(parityProgress[index])) {
-                            current = parityProgress[index];
+                        PriorityInformation current = parityProgress[index];
+                        if (!current.isMaxed())
+                        {
                             lift(index);
-                            somethingLifted = true;
+                            if (!current.equals(parityProgress[index])){
+                                somethingLifted = true;
+                            }
                         }
-
-                    } else {
-
-                        lift(index);
-                        if (!current.equals(parityProgress[index])) {
-                            somethingLifted = true;
-                        }
-
                     }
                 }
-            }
+                break;
+
+            case SELF_ITERATION:
+
+                //We keep looping untill nothing is lifted anymore
+                while(somethingLifted)
+                {
+                    somethingLifted = false;
+
+                    //In the naive aproach we go through all indentifiers in order and lift
+                    //them untill they do not change anymore.
+                    for(int i = 0; i< parityProgress.length; i++) {
+
+                        int index = schedule[i];
+
+                        PriorityInformation current = parityProgress[index];
+                        if (!current.isMaxed())
+                        {
+                            lift(index);
+
+                            while (!current.equals(parityProgress[index])){
+                                current = parityProgress[index];
+                                lift(index);
+                                somethingLifted = true;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case MAX_ITERATION:
+
+                //We keep looping untill nothing is lifted anymore
+                while(somethingLifted)
+                {
+                    somethingLifted = false;
+
+                    //In the naive aproach we go through all indentifiers in order and lift
+                    //them untill they do not change anymore.
+                    for(int i = 0; i< parityProgress.length; i++) {
+
+                        int index = schedule[i];
+
+                        PriorityInformation current = parityProgress[index];
+
+                        int[] successors = game.getNode(index).getSuccessors();
+                        if (!current.isMaxed()) {
+                            if (contains(successors, index)) {
+
+                                lift(i);
+
+                                while (!current.equals(parityProgress[index])) {
+                                    current = parityProgress[index];
+                                    lift(index);
+                                    somethingLifted = true;
+                                }
+
+                            } else {
+
+                                lift(index);
+                                if (!current.equals(parityProgress[index])) {
+                                    somethingLifted = true;
+                                }
+
+                            }
+                        }
+                    }
+                }
+                break;
         }
+
     }
+
 
 
     void lift(int identifier){

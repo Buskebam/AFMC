@@ -1,4 +1,6 @@
 import java.io.File;
+import java.text.DecimalFormat;
+import java.util.Formatter;
 import java.util.concurrent.Callable;
 
 import paritygame.ParityGame;
@@ -8,12 +10,14 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import smallprogressmeasure.SmallProgressMeasure;
 
+import static smallprogressmeasure.SmallProgressMeasure.*;
+
 
 public class Main implements Callable<Integer> {
     @Parameters(index = "0", paramLabel = "GM_FILE", description = "Path to the parity game file (*.gm)")
     private File gameFile;
 
-    @Option(names = { "-l", "--lift-selection" },  description = "NAIVE, RANDOM_NAIVE, ITERATIVE, RANDOM_ITERATIVE, SELF_ITERATIVE, RANDOM_SELF_ITERATIVE, ...")
+    @Option(names = { "-l", "--lift-selection" },  description = "NAIVE, RANDOM_NAIVE, PREDECESSOR_NAIVE, ITERATIVE, RANDOM_ITERATIVE, SELF_ITERATIVE, PREDECESSOR_ITERATIVE, RANDOM_SELF_ITERATIVE, PREDECESSOR_SELF_ITERATIVE...")
     private String algorithm = "NAIVE";
 
     @Option(names = { "-s", "--seed" },  description = "Seed used for random generator")
@@ -34,6 +38,17 @@ public class Main implements Callable<Integer> {
         }
 
         ParityGame game = ParityGameFactory.getParityGame(gameFile);
+
+
+        switch (algorithm)
+        {
+            case "PREDECESSOR_NAIVE":
+            case "PREDECESSOR_ITERATIVE":
+            case "PREDECESSOR_SELF_ITERATIVE":
+                game.calculatePredecessors();
+                break;
+        }
+
         SmallProgressMeasure solver = new SmallProgressMeasure(game);
 
         long startTime = System.nanoTime();
@@ -41,26 +56,39 @@ public class Main implements Callable<Integer> {
         switch(algorithm)
         {
             case "NAIVE":
-                solver.calculateNaive();
+                solver.calculate(NAIVE_SCHEDULE,NO_ITERATION,seed);
                 break;
 
             case "RANDOM_NAIVE":
-                solver.calculateRandomNaive(seed);
+                solver.calculate(RANDOM_SCHEDULE,NO_ITERATION,seed);
                 break;
+
+            case "PREDECESSOR_NAIVE":
+                solver.calculate(PREDECESSOR_SCHEDULE,NO_ITERATION,seed);
+                break;
+
             case "ITERATIVE":
-                solver.calculateIterative();
+                solver.calculate(NAIVE_SCHEDULE,MAX_ITERATION,seed);
                 break;
 
             case "RANDOM_ITERATIVE":
-                solver.calculateRandomIterative(seed);
+                solver.calculate(RANDOM_SCHEDULE,MAX_ITERATION,seed);
+                break;
+
+            case "PREDECESSOR_ITERATIVE":
+                solver.calculate(PREDECESSOR_SCHEDULE,MAX_ITERATION,seed);
                 break;
 
             case "SELF_ITERATIVE":
-                solver.calculateSelfIterative();
+                solver.calculate(NAIVE_SCHEDULE,SELF_ITERATION,seed);
                 break;
 
             case "RANDOM_SELF_ITERATIVE":
-                solver.calculateRandomSelfIterative(seed);
+                solver.calculate(RANDOM_SCHEDULE,SELF_ITERATION,seed);
+                break;
+
+            case "PREDECESSOR_SELF_ITERATIVE":
+                solver.calculate(PREDECESSOR_SCHEDULE,SELF_ITERATION,0);
                 break;
 
             default:
@@ -78,8 +106,11 @@ public class Main implements Callable<Integer> {
             solver.printResultZeroIdentifier();
         }
         System.out.println("-------------------------------------------------------------");
-        System.out.println("EvaluationTime: " + duration + "ns");
-        System.out.println("LiftCounter: " + solver.getLiftCounter());
+
+        DecimalFormat formatter = new DecimalFormat("000,000,000");
+
+        System.out.println("EvaluationTime: " + formatter.format(duration) + "ns");
+        System.out.println("LiftCounter:    " + solver.getLiftCounter());
 
         return 0;
     }

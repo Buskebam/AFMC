@@ -9,6 +9,8 @@ public class ParityNode {
     int[] successors = null;
     String name = null;
 
+    int[] predecessors = null;
+
     public ParityNode(int identifier, int priority, boolean ownerOdd, int[] successors, String name)
     {
         this.identifier = identifier;
@@ -65,6 +67,14 @@ public class ParityNode {
 
     public void setPriorityOdd(boolean priorityOdd) {
         this.priorityOdd = priorityOdd;
+    }
+
+    public int[] getPredecessors() {
+        return predecessors;
+    }
+
+    public void setPredecessors(int[] predecessors) {
+        this.predecessors = predecessors;
     }
 
     @Override
