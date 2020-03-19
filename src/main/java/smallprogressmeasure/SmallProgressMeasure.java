@@ -125,7 +125,6 @@ public class SmallProgressMeasure {
                     schedule[i] = temp;
                 }
 
-                System.out.println(Arrays.toString(schedule));
                 break;
         }
 
@@ -208,7 +207,7 @@ public class SmallProgressMeasure {
                         if (!current.isMaxed()) {
                             if (contains(successors, index)) {
 
-                                lift(i);
+                                lift(index);
 
                                 while (!current.equals(parityProgress[index])) {
                                     current = parityProgress[index];
@@ -271,6 +270,15 @@ public class SmallProgressMeasure {
         }
         //save result
         parityProgress[identifier] = info;
+
+        /*
+        System.out.println("########################3");
+        System.out.println(identifier);
+        System.out.println("########################3");
+        print();
+        System.out.println("");
+
+         */
     }
 
 
