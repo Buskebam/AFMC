@@ -4,8 +4,7 @@ import paritygame.ParityGame;
 import paritygame.ParityNode;
 
 import javax.swing.*;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 import static helperfunctions.ArrayHelper.contains;
 
@@ -75,19 +74,32 @@ public class SmallProgressMeasure {
 
                 boolean[] scheduled = new boolean[parityProgress.length];
 
-                int currentNode = -1;
-                int everythingSheduledUntill = 0;
+                int everythingScheduledUntil = 0;
+
+                Set<Integer> potentialNodes = new HashSet<Integer>();
 
                 for(int i = 0; i< schedule.length;i++) {
+
+                    int currentNode = -1;
+
+                    while(!potentialNodes.isEmpty()&&currentNode == -1) {
+                        int potentialNode = potentialNodes.iterator().next();
+                        potentialNodes.remove(potentialNode);
+
+                        if(!scheduled[potentialNode])
+                        {
+                            currentNode = potentialNode;
+                        }
+                    }
 
                     if(currentNode == -1) //all predesessors scheduled so new node has to be found or start state
                     {
                         //look for first not scheduled node
-                        for(int j = everythingSheduledUntill; j<scheduled.length;j++)
+                        for(int j = everythingScheduledUntil; j<scheduled.length;j++)
                         {
                             if(!scheduled[j])
                             {
-                                everythingSheduledUntill = j;
+                                everythingScheduledUntil = j;
                                 currentNode = j;
                                 break;
                             }
@@ -99,17 +111,8 @@ public class SmallProgressMeasure {
 
                     int[] currentPredecessors =  game.getNode(currentNode).getPredecessors();
 
-                    currentNode = -1; //untill better found no new current
-
                     for (int j = 0; j < currentPredecessors.length; j++) {
-
-                        int potentialPredecessor = currentPredecessors[j];
-
-                        if(!scheduled[potentialPredecessor])
-                        {
-                            currentNode = potentialPredecessor;
-                            break;
-                        }
+                        potentialNodes.add(currentPredecessors[j]);
                     }
 
                 }
