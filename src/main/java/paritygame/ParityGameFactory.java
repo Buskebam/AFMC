@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static helperfunctions.ArrayHelper.listToArray;
+
 public class ParityGameFactory {
 
     static public ParityGame getParityGame(String path)
@@ -79,7 +81,7 @@ public class ParityGameFactory {
     static private int[] parseSuccessor(BufferedReader reader, int highestIdentifier) throws IOException {
 
         //first put found values in list, which later will extracted to suplly an array when the size is known.
-        List<Integer> list = new ArrayList<Integer>();
+        ArrayList<Integer> list = new ArrayList<Integer>();
 
         do{
             int foundSuccessor= parseNatural(reader);
@@ -95,13 +97,7 @@ public class ParityGameFactory {
         while((char) reader.read() == ',');
         reader.reset();
 
-        //convert list to array
-        int[] result = new int[list.size()];
-
-        for (int i= 0; i<list.size();i++) {
-            result[i] = list.get(i);
-        }
-        return result;
+        return listToArray(list);
     }
 
     static private int parseNatural(BufferedReader reader) throws IOException {
