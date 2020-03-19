@@ -13,7 +13,7 @@ public class Main implements Callable<Integer> {
     @Parameters(index = "0", paramLabel = "GM_FILE", description = "Path to the parity game file (*.gm)")
     private File gameFile;
 
-    @Option(names = { "-l", "--lift-selection" },  description = "NAIVE, RANDOM_NAIVE, ITERATIVE, RANDOM_ITERATIVE, ...")
+    @Option(names = { "-l", "--lift-selection" },  description = "NAIVE, RANDOM_NAIVE, ITERATIVE, RANDOM_ITERATIVE, SELF_ITERATIVE, RANDOM_SELF_ITERATIVE, ...")
     private String algorithm = "NAIVE";
 
     @Option(names = { "-s", "--seed" },  description = "Seed used for random generator")
@@ -53,6 +53,14 @@ public class Main implements Callable<Integer> {
 
             case "RANDOM_ITERATIVE":
                 solver.calculateRandomIterative(seed);
+                break;
+
+            case "SELF_ITERATIVE":
+                solver.calculateSelfIterative();
+                break;
+
+            case "RANDOM_SELF_ITERATIVE":
+                solver.calculateRandomSelfIterative(seed);
                 break;
 
             default:

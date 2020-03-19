@@ -3,8 +3,11 @@ package smallprogressmeasure;
 import paritygame.ParityGame;
 import paritygame.ParityNode;
 
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.Random;
+
+import static helperfunctions.ArrayHelper.contains;
 
 public class SmallProgressMeasure {
 
@@ -191,6 +194,109 @@ public class SmallProgressMeasure {
     }
 
 
+    public void calculateSelfIterative(){
+
+        boolean somethingLifted = true;
+
+        //We keep looping untill nothing is lifted anymore
+        while(somethingLifted)
+        {
+            somethingLifted = false;
+
+            //In the naive aproach we go through all indentifiers in order and lift
+            //them untill they do not change anymore.
+            for(int i = 0; i< parityProgress.length; i++) {
+
+                PriorityInformation current = parityProgress[i];
+
+                int[] successors = game.getNode(i).getSuccessors();
+                if (!current.isMaxed()) {
+                    if (contains(successors, i)) {
+
+                        lift(i);
+
+                        while (!current.equals(parityProgress[i])) {
+                            current = parityProgress[i];
+                            lift(i);
+                            somethingLifted = true;
+                        }
+
+                    } else {
+
+                        lift(i);
+                        if (!current.equals(parityProgress[i])) {
+                            somethingLifted = true;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    public void calculateRandomSelfIterative(int seed){
+
+        //make schedule
+        int[] schedule = new int[parityProgress.length];
+
+        //fil it with regular order
+        for(int i = 0; i< schedule.length; i++) {
+            schedule[i] = i;
+        }
+
+        //randomize schedule
+        Random rand = new Random(seed);
+
+        for (int i = 0; i < schedule.length; i++) {
+            int randomIndexToSwap = rand.nextInt(schedule.length);
+            int temp = schedule[randomIndexToSwap];
+            schedule[randomIndexToSwap] = schedule[i];
+            schedule[i] = temp;
+        }
+
+
+
+        boolean somethingLifted = true;
+
+        //We keep looping untill nothing is lifted anymore
+        while(somethingLifted)
+        {
+            somethingLifted = false;
+
+            //In the naive aproach we go through all indentifiers in order and lift
+            //them untill they do not change anymore.
+            for(int i = 0; i< parityProgress.length; i++) {
+
+                int index = schedule[i];
+
+                PriorityInformation current = parityProgress[index];
+
+                int[] successors = game.getNode(index).getSuccessors();
+                if (!current.isMaxed()) {
+                    if (contains(successors, index)) {
+
+                        lift(i);
+
+                        while (!current.equals(parityProgress[index])) {
+                            current = parityProgress[index];
+                            lift(index);
+                            somethingLifted = true;
+                        }
+
+                    } else {
+
+                        lift(index);
+                        if (!current.equals(parityProgress[index])) {
+                            somethingLifted = true;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+
     void lift(int identifier){
 
         liftCounter++;
@@ -240,6 +346,17 @@ public class SmallProgressMeasure {
             for (int i = 0; i < parityProgress.length; i++) {
                 System.out.println("Identifier: " + i + " OddWins: " + parityProgress[i].isMaxed());
             }
+        }
+    }
+
+    public void printResultZeroIdentifier()
+    {
+        if(liftCounter==0) {
+            System.out.println("No results available");
+        }
+        else
+        {
+            System.out.println("Identifier: 0 OddWins: " + parityProgress[0].isMaxed());
         }
     }
 
