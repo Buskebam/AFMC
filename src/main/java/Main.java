@@ -100,6 +100,8 @@ public class Main implements Callable<Integer> {
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
 
+        System.out.println("-------------------------------------------------------------");
+
         if(printAll) {
             solver.printResults();
         }
@@ -109,7 +111,7 @@ public class Main implements Callable<Integer> {
         }
         System.out.println("-------------------------------------------------------------");
 
-        DecimalFormat formatter = new DecimalFormat("000,000,000");
+        DecimalFormat formatter = new DecimalFormat("0,000,000,000");
 
         System.out.println("EvaluationTime: " + formatter.format(duration) + "ns");
         System.out.println("LiftCounter:    " + solver.getLiftCounter());

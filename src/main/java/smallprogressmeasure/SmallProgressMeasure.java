@@ -15,9 +15,9 @@ public class SmallProgressMeasure {
     public final static int PREDECESSOR_SCHEDULE = 1;
     public final static int RANDOM_SCHEDULE = 2;
 
-    public final static int NO_ITERATION = 0;
-    public final static int SELF_ITERATION = 1;
-    public final static int MAX_ITERATION = 2;
+    public final static int NO_ITERATION = 3;
+    public final static int SELF_ITERATION = 4;
+    public final static int MAX_ITERATION = 5;
 
     PriorityInformation M = null;
 
@@ -51,7 +51,7 @@ public class SmallProgressMeasure {
     }
 
 
-    public void calculate(int scheduleMode, int progressionMode, int seed)
+    public void calculate(int scheduleMode, int iterationMode, int seed)
     {
         //make schedule
         int[] schedule = new int[parityProgress.length];
@@ -59,6 +59,9 @@ public class SmallProgressMeasure {
         switch (scheduleMode){
 
             case NAIVE_SCHEDULE:
+
+                System.out.println("Schedule: naive");
+
                 //fil it with regular order
                 for(int i = 0; i< schedule.length; i++) {
                     schedule[i] = i;
@@ -68,19 +71,23 @@ public class SmallProgressMeasure {
 
             case PREDECESSOR_SCHEDULE:
 
+                System.out.println("Schedule: predecessor");
+
                 boolean[] scheduled = new boolean[parityProgress.length];
 
                 int currentNode = -1;
+                int everythingSheduledUntill = 0;
 
                 for(int i = 0; i< schedule.length;i++) {
 
                     if(currentNode == -1) //all predesessors scheduled so new node has to be found or start state
                     {
                         //look for first not scheduled node
-                        for(int j = 0; j<scheduled.length;j++)
+                        for(int j = everythingSheduledUntill; j<scheduled.length;j++)
                         {
                             if(!scheduled[j])
                             {
+                                everythingSheduledUntill = j;
                                 currentNode = j;
                                 break;
                             }
@@ -110,6 +117,8 @@ public class SmallProgressMeasure {
 
 
             case RANDOM_SCHEDULE:
+                System.out.println("Schedule: random");
+
                 //fil it with regular order
                 for(int i = 0; i< schedule.length; i++) {
                     schedule[i] = i;
@@ -126,6 +135,9 @@ public class SmallProgressMeasure {
                 }
 
                 break;
+
+            default:
+                System.out.println("Did not recognize schedule");
         }
 
 
@@ -133,9 +145,11 @@ public class SmallProgressMeasure {
 
         boolean somethingLifted = true;
 
-        switch (scheduleMode){
+        switch (iterationMode){
 
             case NO_ITERATION:
+
+                System.out.println("Iteration: no");
 
                 //We keep looping untill nothing is lifted anymore
                 while(somethingLifted)
@@ -160,7 +174,9 @@ public class SmallProgressMeasure {
                 }
                 break;
 
-            case SELF_ITERATION:
+            case MAX_ITERATION:
+
+                System.out.println("Iteration: max");
 
                 //We keep looping untill nothing is lifted anymore
                 while(somethingLifted)
@@ -188,7 +204,9 @@ public class SmallProgressMeasure {
                 }
                 break;
 
-            case MAX_ITERATION:
+            case SELF_ITERATION:
+
+                System.out.println("Iteration: self");
 
                 //We keep looping untill nothing is lifted anymore
                 while(somethingLifted)
@@ -206,7 +224,6 @@ public class SmallProgressMeasure {
                         int[] successors = game.getNode(index).getSuccessors();
                         if (!current.isMaxed()) {
                             if (contains(successors, index)) {
-
                                 lift(index);
 
                                 while (!current.equals(parityProgress[index])) {
@@ -227,6 +244,9 @@ public class SmallProgressMeasure {
                     }
                 }
                 break;
+
+            default:
+                System.out.println("Did not recognize iteration mode");
         }
 
     }
