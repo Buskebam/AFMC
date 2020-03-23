@@ -39,10 +39,7 @@ public class PriorityInformation {
 
                 boolean valueIncreased = false;
 
-                if(!isPriorityOdd)
-                {
-                    priority--; //we want to start at highest odd number
-                }
+                //we want to start at highest odd number however in the current state it is always odd.
 
                 //We loop from highest odd priority to the smallest
                 for(int i = priority; i >= 1 && !valueIncreased;i-= 2 )
@@ -51,14 +48,6 @@ public class PriorityInformation {
                     int mPrio = M.getCountPriority(i);
                     int infoPrio = info[i];
 
-                    //When values are equal, we need to increase another part because this value
-                    //is maxed out now. So we reset to zero and try to increase a number with a lower
-                    //priority
-
-                    if(mPrio==infoPrio)
-                    {
-                        leastM.setCountPriority(i,0);
-                    }
 
                     //When there is still room to increase the value this is done and the boolean is set to
                     //stop looking for a priority to increase.
@@ -66,6 +55,13 @@ public class PriorityInformation {
                     {
                         leastM.setCountPriority(i,infoPrio+1);
                         valueIncreased = true;
+                    }else {
+
+                        //When values are equal, we need to increase another part because this value
+                        //is maxed out now. So we reset to zero and try to increase a number with a lower
+                        //priority
+                        leastM.setCountPriority(i, 0);
+
                     }
 
                 }
@@ -153,11 +149,14 @@ public class PriorityInformation {
 
     int getCountPriority(int priority)
     {
+        //commented out for speed, during testing this message came never up
+        /*
         if(maxed)
         {
             System.out.println("WARNING: Priority is read while it is maxed, this value does not represent anything!");
             return Integer.MAX_VALUE;
         }
+         */
         return info[priority];
     }
 
