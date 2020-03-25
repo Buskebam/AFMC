@@ -109,7 +109,7 @@ public class ParityNode {
             completeString += " \"" + name +"\"";
         }
 
-        completeString += ";\n";
+        completeString += ';'+ System.lineSeparator();
 
         return completeString;
     }

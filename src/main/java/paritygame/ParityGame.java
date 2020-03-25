@@ -79,7 +79,7 @@ public class ParityGame {
         //Now we can test parser easy by comparing printed structure
         //and original file.
 
-        String completeString = "parity " + (nodes.length - 1) + ";\n";
+        String completeString = "parity " + (nodes.length - 1) + ";" + System.lineSeparator();
 
         for(int i = 0; i< nodes.length ; i++)
         {
