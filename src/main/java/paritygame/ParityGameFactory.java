@@ -73,12 +73,7 @@ public class ParityGameFactory {
 
         String name = parseString(reader);
 
-        readSkipThrowError(reader, ';');
-
-        if(readSkip(reader, '\r'))//windows uses two chars for a newline...
-        {
-            readSkipThrowError(reader,'\n');
-        }
+        readSkipThrowError(reader, ';'+ System.lineSeparator());
 
         return new ParityNode(identifier,priority,owner,successors,name);
     }
