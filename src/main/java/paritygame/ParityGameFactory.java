@@ -39,7 +39,7 @@ public class ParityGameFactory {
 
         ParityGame game = new ParityGame(highestIdentifier);
 
-        readSkipThrowError(reader, ";\n");
+        readSkipThrowError(reader, ';'+ System.lineSeparator());
 
         for(int i = 0; i<highestIdentifier+1; i++)
         {
