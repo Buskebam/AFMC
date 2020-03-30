@@ -20,7 +20,7 @@ public class Main implements Callable<Integer> {
     @Option(names = { "-l", "--lift-selection" },  description = "NAIVE_NO_ITERATION, RANDOM_NO_ITERATION, PREDECESSOR_NO_ITERATION, " +
                                                                  "NAIVE_MAX_ITERATION, RANDOM_MAX_ITERATION, PREDECESSOR_MAX_ITERATION, " +
                                                                  "NAIVE_SELF_ITERATION, RANDOM_SELF_ITERATION, PREDECESSOR_SELF_ITERATION...")
-    private String algorithm = "NAIVE";
+    private String algorithm = "NAIVE_NO_ITERATION";
 
     @Option(names = { "-s", "--seed" },  description = "Seed used for random generator")
     private int seed = 0;
