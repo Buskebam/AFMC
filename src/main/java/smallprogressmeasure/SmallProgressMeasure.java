@@ -25,7 +25,7 @@ public class SmallProgressMeasure {
 
     ParityGame game = null;
 
-    int liftCounter = 0;
+    long liftCounter = 0;
 
     public SmallProgressMeasure(ParityGame game){
 
@@ -343,7 +343,7 @@ public class SmallProgressMeasure {
         }
     }
 
-    public int getLiftCounter() {
+    public long getLiftCounter() {
         return liftCounter;
     }
 }
